@@ -22,7 +22,7 @@ static word peek() {
 }
 
 static interpret_result_e run() {
-    word a, b, c;
+    word a, b, c, id;
     
     #define READ_BYTE() (vm.chunk->codes[vm.pc++])
     #define READ_NUM() (vm.chunk->codes[vm.pc++])
@@ -41,9 +41,13 @@ static interpret_result_e run() {
                 vm.pc = address;
                 break;
             case OP_CALL:
-                word id = READ_NUM();
+                id = READ_NUM();
                 push_return_stack(vm.pc);
                 vm.pc = dict_get_address(vm.dict, id);
+                break;
+            case OP_JZERO:
+                break;
+            case OP_JTRUE:
                 break;
             case OP_PUSH:
                 push_data_stack(READ_NUM());

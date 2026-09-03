@@ -6,6 +6,8 @@
 typedef enum {
     OP_RETURN,
     OP_CALL,
+    OP_JZERO,
+    OP_JTRUE,
     OP_PUSH,
     OP_ADD,
     OP_SUB,
