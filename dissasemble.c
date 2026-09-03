@@ -7,12 +7,11 @@ static int simple_instruction(const char *name, int offset) {
 
 static int constant_instruction(const char *name, int offset, chunk_t *chunk) {
     printf("%s %04d\n", name, (word) chunk->codes[offset+1]);
-    return offset+1+sizeof(word);
+    return offset+1+WORD_SIZE;
 }
 
-static int long_constant_instruction(const char *name, int offset, chunk_t *chunk) {
-    printf("%s %04d\n", name, (uint32_t) chunk->codes[offset+1]);
-    return offset+1+sizeof(uint32_t);
+static int address_instruction(const char *name, int offset, chunk_t *chunk) {
+    return offset+1+ADDRESS_SIZE;
 }
 
 void disassemble_chunk(chunk_t *chunk, const char *name) {
@@ -28,6 +27,14 @@ int disassemble_instruction(chunk_t *chunk, int offset) {
     switch (byte) {
         case OP_RETURN:
             return simple_instruction(STR(OP_RETURN), offset);
+        case OP_CALL:
+            return constant_instruction(STR(OP_CALL), offset, chunk);
+        case OP_JFALSE:
+            return address_instruction(STR(OP_JFALSE), offset, chunk);
+        case OP_JTRUE:
+            return address_instruction(STR(OP_JTRUE), offset, chunk);
+        case OP_PUSH:
+            return constant_instruction(STR(OP_PUSH), offset, chunk);
         case OP_ADD:
             return simple_instruction(STR(OP_ADD), offset);
         case OP_SUB:
@@ -38,8 +45,6 @@ int disassemble_instruction(chunk_t *chunk, int offset) {
             return simple_instruction(STR(OP_MUL), offset);
         case OP_READ:
             return simple_instruction(STR(OP_READ), offset);
-        case OP_PUSH:
-            return constant_instruction(STR(OP_PUSH), offset, chunk);
     }
     fputs("Unknow OPCODE\n", stderr);
     return offset + 1;
