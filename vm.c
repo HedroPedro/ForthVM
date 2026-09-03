@@ -22,15 +22,16 @@ static word peek() {
 }
 
 static interpret_result_e run() {
+    word a, b, c;
+    
     #define READ_BYTE() (vm.chunk->codes[vm.pc++])
     #define READ_NUM() (vm.chunk->codes[vm.pc++])
-    #define BINRAY_OP(op) do {    \
-        word a = pop_data_stack();\
-        word b = pop_data_stack();\
+    #define BINARY_OP(op) do {    \
+        a = pop_data_stack();\
+        b = pop_data_stack();\
         push_data_stack(a op b);  \
     } while (false)
     
-
     uint8_t instruction;
     for (;;) {
         instruction = READ_BYTE();
@@ -48,30 +49,51 @@ static interpret_result_e run() {
                 push_data_stack(READ_NUM());
                 break;
             case OP_ADD:
-                BINRAY_OP(+);
+                BINARY_OP(+);
                 break;
             case OP_SUB:
-                BINRAY_OP(-);
+                BINARY_OP(-);
                 break;
             case OP_DIV:
-                BINRAY_OP(/);
+                BINARY_OP(/);
                 break;
             case OP_MUL:
-                BINRAY_OP(*);
+                BINARY_OP(*);
+                break;
+            case OP_MOD:
+                BINARY_OP(%);
+                break;
+            case OP_AND:
+                BINARY_OP(&);
+                break;
+            case OP_OR:
+                BINARY_OP(|);
+            case OP_XOR:
+                BINARY_OP(^);
                 break;
             case OP_DUP:
                 push_data_stack(peek());
                 break;
             case OP_ROT:
-                word a = pop_data_stack();
-                word b = pop_data_stack();
-                word c = pop_data_stack();
+                a = pop_data_stack();
+                b = pop_data_stack();
+                c = pop_data_stack();
+                push_data_stack(c);
+                push_data_stack(a);
+                push_data_stack(b);
                 break;
+            case OP_READ:
+                break;
+            case OP_WRITE:
+                break;
+            default:
+                return INTERPRET_RUNTIME_ERROR;
         }
     }
 
-    #undef READ_NUM()
-    #undef READ_BYTE()
+    #undef BINARY_OP
+    #undef READ_NUM
+    #undef READ_BYTE
 }
 
 interpret_result_e interpret(chunk_t *chunk) {

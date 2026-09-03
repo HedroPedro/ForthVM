@@ -11,10 +11,15 @@ typedef enum {
     OP_SUB,
     OP_DIV,
     OP_MUL,
+    OP_MOD,
+    OP_AND,
+    OP_OR,
+    OP_XOR,
     OP_DUP,
     OP_SWAP,
     OP_ROT,
     OP_READ,
+    OP_WRITE,
 } opcode_e;
 
 typedef struct {
