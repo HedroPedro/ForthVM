@@ -5,12 +5,10 @@
 #define MAX_ENTRIES 256
 
 typedef struct {
-    uintptr_t offset;
-    word id;
     bool is_set;
+    address start;
 } dictionary_t;
 
-void dict_init();
-void dict_append(uint32_t id, int offset);
-void dict_reset(dictionary_t dict);
+void dict_init(dictionary_t *dict, size_t size);
+address dict_get_address(dictionary_t *dict, word id);
 #endif

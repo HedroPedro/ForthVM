@@ -8,9 +8,9 @@
 #define WORD_SIZE sizeof(word)
 #define ADDRESS_SIZE sizeof(address)
 #define AMOUNT_OF_WORDS (256)
-#define STACK_SIZE (WORD_SIZE*AMOUNT_OF_WORDS)
+#define STACK_SIZE (4*1024)
 #define STR(x) (#x)
-typedef uint8_t word;
+typedef int16_t word;
 typedef uintptr_t address;
 
 #endif

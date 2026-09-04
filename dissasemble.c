@@ -6,7 +6,7 @@ static int simple_instruction(const char *name, int offset) {
 }
 
 static int constant_instruction(const char *name, int offset, chunk_t *chunk) {
-    printf("%s %04d\n", name, (word) chunk->codes[offset+1]);
+    printf("%s %06d\n", name, *((word *) &chunk->codes[offset+1]));
     return offset+1+WORD_SIZE;
 }
 
