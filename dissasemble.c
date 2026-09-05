@@ -11,6 +11,7 @@ static int constant_instruction(const char *name, int offset, chunk_t *chunk) {
 }
 
 static int address_instruction(const char *name, int offset, chunk_t *chunk) {
+    printf("%s %06d\n", name, *((address *) &chunk->codes[offset+1]));
     return offset+1+ADDRESS_SIZE;
 }
 
@@ -46,6 +47,6 @@ int disassemble_instruction(chunk_t *chunk, int offset) {
         case OP_READ:
             return simple_instruction(STR(OP_READ), offset);
     }
-    fputs("Unknow OPCODE\n", stderr);
+    puts("Unknow OPCODE\n");
     return offset + 1;
 }

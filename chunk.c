@@ -7,16 +7,30 @@ void chunk_init(chunk_t *chunk) {
 }
 
 void chunk_write(chunk_t *chunk, value_t *byte) {
+    #define WRITE(value, total, code, index) do {\
+        if (index + sizeof(value) >= total) { \
+            int old_capacity = total; \
+            total = GROW_CAPACITY(old_capacity); \
+            code = GROW_ARRAY(uint8_t, total, old_capacity, code); \
+        } \
+        memcpy((code + index), &value, sizeof(value)); \
+        index += sizeof(value); \
+    } while(false)
     switch (byte->type) {
-    case 0:
+    case CODE:
+        WRITE(byte->code, chunk->capacity, chunk->codes, chunk->count);
         break;
-    case 1:
+    case WORD:
+        WRITE(byte->w, chunk->capacity, chunk->codes, chunk->count);
         break;
-    case 2:
+    case ADDRESS:
+        WRITE(byte->a, chunk->capacity, chunk->codes, chunk->count);
         break;
     default:
-        break;
+        fputs("Unknown value type\n", stderr);
+        exit(1);
     }
+    #undef WRITE
 }
 
 void chunk_free(chunk_t *chunk) {

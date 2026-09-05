@@ -1,7 +1,7 @@
 #ifndef MEMORY_H_
 #define MEMORY_H_
 #include "common.h"
-#define GROW_CAPACITY(u) (u < 8 ? 8 : (u<<1))
+#define GROW_CAPACITY(u) (u < 8 ? 8 : (u<<2))
 #define GROW_ARRAY(type, new_size, old_size, ptr) \
     (type *) reallocate(ptr, sizeof(type) * old_size, sizeof(type) * new_size)
 #define FREE_ARRAY(type, old_size, ptr) \

@@ -35,6 +35,12 @@ typedef enum {
     AMOUNT_OF_OP
 } opcode_e;
 
+typedef enum {
+    CODE,
+    WORD,
+    ADDRESS,
+} value_e;
+
 typedef struct {
     int count;
     int capacity;

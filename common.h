@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include <sys/mman.h>
+#include <string.h>
 #define WORD_SIZE sizeof(word)
 #define ADDRESS_SIZE sizeof(address)
 #define AMOUNT_OF_WORDS (256)
