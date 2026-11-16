@@ -5,19 +5,19 @@
 #include "dictionary.h"
 
 typedef struct {
-    uintptr_t  pc;
-    chunk_t *chunk;
-    word *data_stack_top;
-    uintptr_t  *return_stack_top;
-    dictionary_t dict[MAX_ENTRIES];   // 256 entries
-    uintptr_t   return_stack[STACK_SIZE];  // Absolute offset for return
-    word  data_stack[STACK_SIZE];
+	uintptr_t  pc;
+	chunk_t *chunk;
+	word *data_stack_top;
+	uintptr_t  *return_stack_top;
+	dictionary_t dict[MAX_ENTRIES];   // 256 entries
+	uintptr_t   return_stack[STACK_SIZE];  // Absolute offset for return
+	word  data_stack[STACK_SIZE];
 } vm_t;
 
 typedef enum {
-    INTERPRET_OK,
-    INTERPRET_COMPILE_ERROR,
-    INTERPRET_RUNTIME_ERROR
+	INTERPRET_OK,
+	INTERPRET_COMPILE_ERROR,
+	INTERPRET_RUNTIME_ERROR
 } interpret_result_e;
 
 void vm_init();

@@ -1,6 +1,7 @@
 #include "vm.h"
 
 vm_t vm;
+uintmax_t n_opcodes[AMOUNT_OF_OP];
 
 void static reset_stacks() {
     vm.data_stack_top = vm.data_stack;
@@ -44,6 +45,10 @@ static interpret_result_e run() {
         a = pop_data_stack();\
         b = pop_data_stack();\
         push_data_stack(a op b);  \
+    } while (false)
+    #define SINGLETON_OP(op) do { \
+        a = pop_data_stack();\
+        push_data_stack(op a); \
     } while (false)
     word a, b, c, id;
     address ad;
@@ -102,6 +107,11 @@ static interpret_result_e run() {
             case OP_XOR:
                 BINARY_OP(^);
                 break;
+            case OP_NOT:
+                SINGLETON_OP(~);
+                break;
+            case OP_NEG:
+                SINGLETON_OP(-);
             case OP_EQ:
                 BINARY_OP(==);
                 break;
@@ -144,15 +154,14 @@ static interpret_result_e run() {
                 return INTERPRET_RUNTIME_ERROR;
         }
     }
-
     #undef COMP_OP
     #undef BINARY_OP
     #undef READ_BYTE
 }
 
-interpret_result_e interpret(chunk_t *chunk) {
+interpret_result_e interpret(chunk_t *chunk, address start) {
     vm.chunk = chunk;
-    vm.pc = 0;
+    vm.pc = start;
     return run();
 }
 
@@ -163,7 +172,9 @@ void push_data_stack(word value) {
 
 word pop_data_stack() {
     word value = *vm.data_stack_top;
-    --vm.data_stack_top;
+    if ((--vm.data_stack_top) < vm.data_stack) {
+        exit(2);
+    }
     return value;
 }
 
